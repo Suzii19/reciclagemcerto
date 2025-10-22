@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E.iot - Home</title>
+
+  <!-- index -->
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <script src="assets/js/script.js" defer></script>
+
+  <!-- pontos de coleta -->
+  <link rel="stylesheet" href="assets/css/style-pontosdecoleta.css" />
+  <script src="assets/js/script-pontosdecoleta.js" defer></script>
+
+  <!-- parallax -->
+  <link rel="stylesheet" href="assets/css/style-paralax.css" />
+
+  <!-- imagens -->
+  <link rel="stylesheet" href="assets/css/style-img.css" />
+  <script src="assets/js/script-img.js" defer></script>
+
+  <!-- header -->
+  <link rel="stylesheet" href="assets/css/style-header.css" />
+
+  <!-- chatbot -->
+  <link rel="stylesheet" href="assets/css/style-chatbot.css" />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+  />
+  <script src="assets/js/script-chatbot.js" defer></script>
+
+  <!-- background / brilho -->
+  <link rel="stylesheet" href="assets/css/style-background.css" />
+  <script src="assets/js/script-background.js" defer></script>
+  <script src="assets/js/brilho.js" defer></script>
+
+  <!-- como reciclar -->
+  <script src="assets/js/script-comoreciclar.js" defer></script>
+</head>
+
+<body>
+  <!-- chatbot -->
+  <button class="chatbot-toggler">
+    <span class="material-symbols-outlined">mode_comment</span>
+    <span class="material-symbols-outlined">close</span>
+  </button>
+
+  <div class="chatbot">
+    <header>
+      <h2>Chatbot</h2>
+      <span class="close-btn material-symbols-outlined">close</span>
+    </header>
+    <ul class="chatbox">
+      <li class="chat incoming"></li>
+      <li class="chat outgoing"></li>
+    </ul>
+    <div class="chat-input">
+      <textarea placeholder="Digite uma mensagem..." required></textarea>
+      <span id="send-btn" class="material-symbols-outlined">send</span>
+    </div>
+  </div>
+  <!-- /chatbot -->
+
+  <!-- header -->
+  <header>
+    <div class="logo">E.iot - Menu</div>
+    <nav class="nav-links">
+      <ul>
+        <li><a href="#">Início</a></li>
+        <li><a href="comoreciclar.html">Como Reciclar</a></li>
+        <li><a href="pontosDeColeta.html">Pontos de Coleta</a></li>
+      </ul>
+    </nav>
+    <div class="menu-btn" id="menu-btn">☰</div>
+  </header>
+  <!-- /header -->
+
+  <!-- PARALLAX -->
+  <div class="parallax-section">
+    <canvas class="parallax-back" id="bg1"></canvas>
+    <div
+      class="parallax-front"
+      style="background-image: url('https://icones.pro/wp-content/uploads/2022/05/icone-de-recyclage-et-de-durabilite-jaune.png');"
+    ></div>
+  </div>
+
+  <div class="parallax-section">
+    <canvas class="parallax-back" id="bg2"></canvas>
+    <div
+      class="parallax-front"
+      style="background-image: url('https://icones.pro/wp-content/uploads/2022/05/icone-de-recyclage-et-de-durabilite-rouge.png');"
+    ></div>
+  </div>
+
+  <div class="parallax-section">
+    <canvas class="parallax-back" id="bg3"></canvas>
+    <div
+      class="parallax-front"
+      style="background-image: url('https://icones.pro/wp-content/uploads/2022/05/icone-de-recyclage-et-de-durabilite-bleue.png');"
+    ></div>
+  </div>
+  <!-- /PARALLAX -->
+
+  <!-- container do mapa / pontos de coleta -->
+  <main>
+    <section id="pontos-de-coleta">
+      <h2>Pontos de Coleta</h2>
+      <div id="map-container">
+        <!-- O script vai inserir o mapa / API aqui -->
+      </div>
+    </section>
+  </main>
+</body>
+</html>
