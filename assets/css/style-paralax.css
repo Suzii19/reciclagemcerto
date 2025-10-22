@@ -18,22 +18,6 @@ body, html {
   overflow: hidden;
 }
 
-.bg {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: block;
-  z-index: 1;
-}
-
-.light {
-  background: white;
-}
-
-.dark {
-  background: black;
-}
-
 /* ===== CAMADA DE FUNDO ===== */
 .parallax-back {
   position: absolute;
