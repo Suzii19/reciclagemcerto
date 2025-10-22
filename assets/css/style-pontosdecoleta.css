@@ -1,0 +1,7 @@
+#map {
+    height: 500px;         /* altura do mapa */
+    width: 90%;            /* largura dentro do site */
+    margin: 20px auto 40px auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
