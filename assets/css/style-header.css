@@ -6,7 +6,7 @@ header {
   height: 70px;               /* altura normal */
   padding: 0 40px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 
   background-color: rgba(46, 126, 126, 0.507); /* translúcido */
@@ -23,6 +23,8 @@ header {
   font-size: 1.5rem;
   font-weight: bold;
   letter-spacing: 1px;
+  position: absolute;
+  left: 50px;
 }
 
 .nav-links ul {
@@ -31,10 +33,25 @@ header {
   gap: 25px;
 }
 
+.botoesex{background: transparent;
+  color: #6c63ff;
+  border: 1px solid #6c63ff;
+  padding: 8px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: all 0.3s ease;}
+
+  .botoesex:hover {
+  background: #6c63ff;
+  color: white;
+  transform: translateY(-1px);
+}
+
 .nav-links a {
   margin-left: 20px;
-    text-decoration: none;
-    color: #fcfafa;
+    
+    
     font-weight: bold;
     transition: color 0.2s;
 }

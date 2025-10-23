@@ -1,97 +1,149 @@
-const chatInput = document.querySelector(".chat-input textarea");
-const sendChatBtn = document.querySelector(".chat-input span");
-const chatbox = document.querySelector(".chatbox");
-const chatbotToggler = document.querySelector(".chatbot-toggler");
-const chatbotCloseBtn = document.querySelector(".close-btn");
+/* ================= LOGIN / REGISTRO ================= */
+const popup = document.getElementById('loginPopup');
+const openPopup = document.getElementById('openPopup');
+const closePopup = document.getElementById('closePopup');
+const loginForm = document.getElementById('loginForm');
+const registerForm = document.getElementById('registerForm');
+const showRegister = document.getElementById('showRegister');
+const showLogin = document.getElementById('showLogin');
+const loginError = document.getElementById('login-error');
+const registerError = document.getElementById('register-error');
 
-let userMessage;
-const API_KEY = "AIzaSyCG_qnZ5dTi9jW1i0G0ni0IKF4lSve-eOk";
-
-// ====== Criação dos balões de chat ======
-const createChatLi = (message, className) => {
-  const chatLi = document.createElement("li");
-  chatLi.classList.add("chat", className);
-  let chatContent =
-    className === "outgoing"
-      ? `<p></p>`
-      : `<span class="material-symbols-outlined">smart_toy</span><p></p>`;
-  chatLi.innerHTML = chatContent;
-  chatLi.querySelector("p").textContent = message;
-  return chatLi;
-};
-
-// ====== Primeira mensagem do bot ======
-window.addEventListener("load", () => {
-  const li = createChatLi("Olá! Vamos conversar sobre lixo eletrônico. Pergunte qualquer coisa!", "incoming");
-  chatbox.appendChild(li);
-});
-
-// ====== Geração de resposta ======
-const generateResponse = (incomingChatLi) => {
-  const messageElement = incomingChatLi.querySelector("p");
-
-  const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
-
-  const requestOptions = {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      contents: [
-        {
-          role: "user",
-          parts: [{ text: userMessage }]
-        }
-      ],
-      systemInstruction: {
-        role: "system",
-        parts: [
-          {
-            text:
-              "Você é um assistente especializado em lixo eletrônico, reciclagem e sustentabilidade. " +
-              "Sempre mantenha a conversa focada nesses temas, mesmo que o usuário tente falar sobre outro assunto."
-          }
-        ]
-      }
-    })
-  };
-
-  fetch(API_URL, requestOptions)
-    .then((res) => res.json())
-    .then((data) => {
-      messageElement.textContent = data.candidates[0].content.parts[0].text;
-    })
-    .catch((error) => {
-      console.error(error);
-      messageElement.textContent = "Oops! Algo deu errado. Tente novamente.";
-    })
-    .finally(() => chatbox.scrollTo(0, chatbox.scrollHeight));
-};
-
-// ====== Função para enviar mensagem ======
-const handleChat = () => {
-  userMessage = chatInput.value.trim();
-  if(!userMessage) return;
-  chatInput.value = "";
-
-  chatbox.appendChild(createChatLi(userMessage,"outgoing"));
-  chatbox.scrollTo(0,chatbox.scrollHeight);
-
-  setTimeout(() => {
-    const incomingChatLi = createChatLi("Pensando...","incoming");
-    chatbox.appendChild(incomingChatLi);
-    chatbox.scrollTo(0,chatbox.scrollHeight);
-    generateResponse(incomingChatLi);
-  }, 600);
+/* ===== FUNÇÕES AUXILIARES ===== */
+function getUsers() {
+  return JSON.parse(localStorage.getItem('users')) || [];
 }
 
-// ====== Eventos ======
-chatInput.addEventListener("keydown",(e) => {
-  if(e.key === "Enter" && !e.shiftKey){
-      e.preventDefault();
-      handleChat();
-  }
+function saveUsers(users) {
+  localStorage.setItem('users', JSON.stringify(users));
+}
+
+function setLoggedUser(user) {
+  localStorage.setItem('loggedUser', JSON.stringify(user));
+}
+
+function getLoggedUser() {
+  return JSON.parse(localStorage.getItem('loggedUser'));
+}
+
+function getUserName() {
+  return getLoggedUser()?.username || null;
+}
+
+function logoutUser() {
+  localStorage.removeItem('loggedUser');
+  location.reload();
+}
+
+/* ===== POPUP ===== */
+openPopup.addEventListener('click', () => popup.style.display = 'flex');
+closePopup.addEventListener('click', () => popup.style.display = 'none');
+window.addEventListener('click', (e) => {
+  if (e.target === popup) popup.style.display = 'none';
 });
 
-sendChatBtn.addEventListener("click",handleChat);
-chatbotCloseBtn.addEventListener("click", () => document.body.classList.remove("show-chatbot"));
-chatbotToggler.addEventListener("click", () => document.body.classList.toggle("show-chatbot"));
+showRegister.addEventListener('click', (e) => {
+  e.preventDefault();
+  loginForm.classList.add('hidden');
+  registerForm.classList.remove('hidden');
+});
+
+showLogin.addEventListener('click', (e) => {
+  e.preventDefault();
+  registerForm.classList.add('hidden');
+  loginForm.classList.remove('hidden');
+});
+
+/* ===== VALIDAÇÕES ===== */
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+/* ===== REGISTRO ===== */
+registerForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const username = document.getElementById('regUsername').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const password = document.getElementById('regPassword').value.trim();
+
+  registerError.textContent = "";
+
+  if (username.length < 3) {
+    registerError.textContent = "O nome deve ter pelo menos 3 caracteres.";
+    return;
+  }
+  if (!isValidEmail(email)) {
+    registerError.textContent = "E-mail inválido.";
+    return;
+  }
+  if (password.length < 6) {
+    registerError.textContent = "A senha deve ter pelo menos 6 caracteres.";
+    return;
+  }
+
+  const users = getUsers();
+  if (users.some(u => u.username === username)) {
+    registerError.textContent = "Nome já está em uso.";
+    return;
+  }
+  if (users.some(u => u.email === email)) {
+    registerError.textContent = "E-mail já registrado.";
+    return;
+  }
+
+  const newUser = { username, email, password };
+  users.push(newUser);
+  saveUsers(users);
+
+  setLoggedUser(newUser);
+  popup.style.display = 'none';
+  updateHeader();
+});
+
+/* ===== LOGIN ===== */
+loginForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value.trim();
+
+  loginError.textContent = "";
+
+  const users = getUsers();
+  const user = users.find(u => u.username === username && u.password === password);
+
+  if (!user) {
+    loginError.textContent = "Usuário ou senha incorretos!";
+    return;
+  }
+
+  setLoggedUser(user);
+  popup.style.display = 'none';
+  updateHeader();
+});
+
+/* ===== HEADER DINÂMICO ===== */
+function updateHeader() {
+  const header = document.querySelector('.main-header');
+  const loggedUser = getLoggedUser();
+
+  const existingUserDiv = document.querySelector('.user-info');
+  if (existingUserDiv) existingUserDiv.remove();
+
+  if (loggedUser) {
+    if (openPopup) openPopup.remove();
+
+    const userDiv = document.createElement('div');
+    userDiv.classList.add('user-info');
+    userDiv.innerHTML = `
+      <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Usuário">
+      <span>Olá, <b>${loggedUser.username}</b></span>
+      <button id="logoutBtn" class="logout-btn">Sair</button>
+    `;
+    header.appendChild(userDiv);
+
+    document.getElementById('logoutBtn').addEventListener('click', logoutUser);
+  }
+}
+
+/* ===== INICIALIZAÇÃO HEADER ===== */
+document.addEventListener('DOMContentLoaded', updateHeader);
